@@ -6,11 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "auth:migrate": "npx auth@latest migrate --config src/lib/auth.ts",
+    "user:add": "node --env-file=.env scripts/add-user.mjs"
   },
   "dependencies": {
     "@heroui/react": "^3.2.7",
     "@heroui/styles": "^3.2.7",
+    "better-auth": "^1.7.27",
+    "mysql2": "^3.24.6",
     "next": "16.4.6",
     "react": "19.3.0",
     "react-dom": "19.3.0"

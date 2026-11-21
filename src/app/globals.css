@@ -1,7 +1,80 @@
 @import "tailwindcss";
 @import "@heroui/styles";
 
+/* dark: ทำงานตาม class "dark" ที่ <html> (ปุ่มสลับธีม) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ===== Minimal tokens: ขาว/ดำ + สีเน้นสีเดียว ===== */
+:root {
+  --paper: #fafaf9;
+  --ink: #18181b;
+  --pen: #e5484d;
+  --line: #e7e5e4;
+
+  --accent: var(--ink);
+  --accent-foreground: var(--paper);
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --surface: #ffffff;
+  --muted: #71717a;
+  --border: var(--line);
+  --radius: 0.75rem;
+}
+
+.dark {
+  --paper: #0c0c0e;
+  --ink: #f4f4f5;
+  --pen: #ff6369;
+  --line: #27272a;
+
+  --accent: var(--ink);
+  --accent-foreground: var(--paper);
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --surface: #151518;
+  --muted: #a1a1aa;
+  --border: var(--line);
+}
+
 @theme inline {
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-anuphan), var(--font-geist-sans), sans-serif;
   --font-mono: var(--font-geist-mono);
+
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-pen: var(--pen);
+  --color-line: var(--line);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--paper);
+  transition: background-color 0.3s;
+}
+
+/* ค่อย ๆ ปรากฏตอนเลื่อนถึง (เบา ๆ) */
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: reveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 25%;
+  }
+}
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }
