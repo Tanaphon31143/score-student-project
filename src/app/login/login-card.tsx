@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Alert, Button, InputGroup, Input, Label, Spinner, TextField } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
@@ -44,17 +44,24 @@ export function LoginCard() {
 
   const err = errorCode ? (errorText[errorCode] ?? fallbackError) : null;
 
+  // ล็อคอินอยู่แล้ว → ไปแดชบอร์ดเลย
+  const { data: session } = authClient.useSession();
+  useEffect(() => {
+    if (session) router.replace("/dashboard");
+  }, [session, router]);
+
   async function signInWithEmail(e: React.FormEvent) {
     e.preventDefault();
     setPending("email");
     setErrorCode(null);
-    const { error } = await authClient.signIn.email({ email: email.trim(), password });
+    const { data, error } = await authClient.signIn.email({ email: email.trim(), password });
     if (error) {
       setErrorCode(error.code ?? "unknown");
       setPending(null);
       return;
     }
-    router.push("/");
+    // ครู → หน้าทำงานของครู, นักเรียน → หน้านักเรียน
+    router.push((data?.user as { role?: string } | undefined)?.role === "teacher" ? "/teacher" : "/student");
   }
 
   async function signInWithGoogle() {
@@ -62,7 +69,7 @@ export function LoginCard() {
     setErrorCode(null);
     const { error } = await authClient.signIn.social({
       provider: "google",
-      callbackURL: "/",
+      callbackURL: "/dashboard",
       errorCallbackURL: "/login",
     });
     // สำเร็จจะถูก redirect ไป Google เอง — มาถึงตรงนี้แปลว่าเริ่มไม่ได้

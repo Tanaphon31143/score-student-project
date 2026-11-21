@@ -27,6 +27,7 @@ const db = await createConnection({
   password: decodeURIComponent(url.password),
   database: url.pathname.slice(1),
   ssl: { minVersion: "TLSv1.2", rejectUnauthorized: true },
+  timezone: "Z", // เก็บเวลาเป็น UTC ให้ตรงกับแอป
 });
 
 try {

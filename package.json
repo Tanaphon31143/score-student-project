@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "auth:migrate": "npx auth@latest migrate --config src/lib/auth.ts",
-    "user:add": "node --env-file=.env scripts/add-user.mjs"
+    "user:add": "node --env-file=.env scripts/add-user.mjs",
+    "db:migrate": "node --env-file=.env scripts/db-migrate.mjs"
   },
   "dependencies": {
     "@heroui/react": "^3.2.7",
